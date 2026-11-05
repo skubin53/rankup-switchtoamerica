@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#13213c">
+<title>Shannon's Rank-Up Command Center</title>
+<style>
+:root{
+  --bg:#f4f6fa; --card:#ffffff; --ink:#13213c; --muted:#5b6780; --line:#e2e6ee;
+  --accent:#c8102e; --accent-ink:#ffffff; --good:#1d8a4b; --good-bg:#e7f5ec;
+  --warn:#b86e00; --warn-bg:#fff3df; --chip:#eef1f7; --bar:#e6e9f0; --focus:#2b62d9;
+  --sans:"Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1424; --card:#16203a; --ink:#e9edf6; --muted:#9aa6c0; --line:#26314d;
+    --accent:#ff4b5f; --accent-ink:#ffffff; --good:#4cc782; --good-bg:#14301f;
+    --warn:#ffb547; --warn-bg:#33270f; --chip:#1e2a49; --bar:#26314d; --focus:#7aa2ff;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1424; --card:#16203a; --ink:#e9edf6; --muted:#9aa6c0; --line:#26314d;
+  --accent:#ff4b5f; --accent-ink:#ffffff; --good:#4cc782; --good-bg:#14301f;
+  --warn:#ffb547; --warn-bg:#33270f; --chip:#1e2a49; --bar:#26314d; --focus:#7aa2ff;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.wrap{width:min(760px,calc(100% - 32px));margin:0 auto;padding:20px 0 60px;display:flex;flex-direction:column;gap:16px}
+header h1{margin:4px 0 2px;font-size:26px;line-height:1.15;text-wrap:balance}
+header .sub{color:var(--muted);font-size:14px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:-4px 0}
+nav.tabs a{flex:none;text-decoration:none;color:var(--ink);background:var(--chip);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h2{margin:0 0 4px;font-size:18px}
+.card .hint{margin:0 0 12px;color:var(--muted);font-size:14px}
+.today{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat{background:var(--chip);border-radius:12px;padding:12px}
+.stat .n{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat .l{font-size:13px;color:var(--muted)}
+.stat.hot{background:var(--accent);color:var(--accent-ink)}
+.stat.hot .l{color:var(--accent-ink);opacity:.9}
+.goal + .goal{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.goal-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.goal-head .t{font-weight:700;font-size:17px}
+.pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:3px 9px;background:var(--chip);color:var(--muted)}
+.pill.good{background:var(--good-bg);color:var(--good)}
+.pill.warn{background:var(--warn-bg);color:var(--warn)}
+.overall{height:10px;background:var(--bar);border-radius:99px;overflow:hidden;margin:10px 0 4px}
+.overall > i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.req{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.req:last-child{border-bottom:0}
+.req .lbl{font-size:15px}
+.req .num{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;white-space:nowrap}
+.req .bar{grid-column:1 / -1;height:6px;background:var(--bar);border-radius:99px;overflow:hidden}
+.req .bar > i{display:block;height:100%;background:var(--warn);border-radius:99px}
+.req.met .bar > i{background:var(--good)}
+.req .gap{grid-column:1 / -1;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.req.met .gap{color:var(--good);font-weight:600}
+.edit{display:inline-flex;gap:4px}
+button,.btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;cursor:pointer;min-height:36px}
+button.small{padding:3px 9px;min-height:30px;font-size:14px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+button.ghost{background:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-height:38px;width:100%}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row > *{flex:1 1 140px}
+.list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.lead{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center}
+.lead .who{font-weight:700}
+.lead .meta{font-size:13px;color:var(--muted)}
+.lead .acts{grid-column:1 / -1;display:flex;gap:6px;flex-wrap:wrap}
+.lead .acts select{width:auto;flex:1 1 150px;min-height:34px;padding:4px 8px}
+.empty{color:var(--muted);font-size:14px;padding:6px 0}
+.funnel{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;margin:10px 0}
+.funnel .stat .n{font-size:22px}
+.check{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.check:last-child{border-bottom:0}
+.check input{width:22px;height:22px;min-height:0;flex:none;accent-color:var(--good)}
+.check label{flex:1}
+.team{display:grid;gap:10px}
+.mate{border:1px solid var(--line);border-radius:12px;padding:12px}
+.mate .nm{font-weight:700}
+.mate ul{margin:6px 0 0;padding-left:18px;font-size:14px;color:var(--muted)}
+.note{font-size:13px;color:var(--muted)}
+details summary{cursor:pointer;font-weight:700}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Rank-Up Command Center</div>
+    <h1 id="hello">Hi</h1>
+    <div class="sub" id="sub"></div>
+  </header>
+
+  <nav class="tabs" aria-label="Sections">
+    <a href="#today">Today</a><a href="#goals">My numbers</a><a href="#follow">Follow up</a><a href="#leads">My people</a><a href="#checklist">Checklist</a><a href="#teamcard" id="teamtab" hidden>Team</a><a href="#settings">Settings</a>
+  </nav>
+
+  <section class="card" id="today">
+    <h2>Your target for today</h2>
+    <p class="hint" id="todayhint"></p>
+    <div class="today" id="todaystats"></div>
+    <p class="note" id="todaynote" style="margin:12px 0 0"></p>
+  </section>
+
+  <section class="card" id="goals">
+    <h2>My numbers</h2>
+    <p class="hint">Tap + or - when a number changes. Volume and directors come from last month's business report. Customers count this month only.</p>
+    <div id="goallist"></div>
+  </section>
+
+  <section class="card" id="follow">
+    <h2>Follow up today</h2>
+    <p class="hint">Anyone you have not talked to in 3 days or more.</p>
+    <div class="list" id="followlist"></div>
+  </section>
+
+  <section class="card" id="leads">
+    <h2>My people</h2>
+    <p class="hint">Everyone you are talking to, and where they are.</p>
+    <form id="addform" class="row" autocomplete="off">
+      <input id="newname" placeholder="Name" aria-label="Name" required>
+      <select id="newstage" aria-label="Stage"></select>
+      <input id="newnote" placeholder="Note (optional)" aria-label="Note">
+      <button class="primary" type="submit">Add</button>
+    </form>
+    <div class="funnel" id="funnel"></div>
+    <div class="row" style="margin-top:4px">
+      <select id="filter" aria-label="Show"></select>
+    </div>
+    <div class="list" id="leadlist"></div>
+  </section>
+
+  <section class="card" id="checklist">
+    <h2>Today's checklist</h2>
+    <p class="hint" id="streak"></p>
+    <div id="checks"></div>
+  </section>
+
+  <section class="card" id="teamcard" hidden>
+    <h2>Team</h2>
+    <p class="hint" id="teamhint"></p>
+    <div class="team" id="teamlist"></div>
+  </section>
+
+  <section class="card" id="settings">
+    <h2>Settings</h2>
+    <div class="row">
+      <label style="flex:1 1 200px">Goal date<br><input type="date" id="deadline"></label>
+      <label style="flex:1 1 200px">Out of every 10 people I invite, about this many say yes<br><input type="number" id="rate" min="1" max="10" step="1"></label>
+    </div>
+    <p class="note">Once you have invited 5 or more people here, the page uses your real yes rate instead.</p>
+    <div class="row" style="margin-top:12px">
+      <button type="button" id="export">Save a backup</button>
+      <button type="button" id="importbtn">Load a backup</button>
+      <input type="file" id="importfile" accept="application/json" hidden>
+    </div>
+    <p class="note" style="margin-top:10px">Everything you type stays on this phone or computer only. Save a backup now and then so you never lose your list.</p>
+  </section>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const CONFIG = {"slug": "shannon-7k2", "first": "Shannon", "status": "Executive Director 4", "pay_rate": "Executive Director 4", "goals": [{"id": "next", "label": "Next rank", "target": "Executive Director 5", "reqs": [{"key": "customers", "label": "Active personal customers this month", "have": 5, "need": 20}, {"key": "senior", "label": "Personally enrolled Senior Directors", "have": 1, "need": 2}, {"key": "directors", "label": "Personally enrolled Directors", "have": 10, "need": 10}, {"key": "ov", "label": "Organization volume", "have": 185279.6, "need": 90000}, {"key": "peg", "label": "PEG volume", "have": 244620, "need": 90000}, {"key": "lp", "label": "Leadership points (3-month average)", "have": 15.3, "need": 15}]}], "as_of_text": "November 4"};
+const TEAM = [{"first": "Gladys", "status": "Director 3", "pay_rate": "Director", "goals": [{"id": "pay", "label": "Next pay level", "target": "Director 2", "reqs": [{"key": "customers", "label": "Active personal customers this month", "have": 1, "need": 10}, {"key": "ov", "label": "Organization volume", "have": 675.9, "need": 1000}, {"key": "lp", "label": "Leadership points (3-month average)", "have": 2.7, "need": 2}]}, {"id": "next", "label": "Next rank", "target": "Director 4", "reqs": [{"key": "customers", "label": "Active personal customers this month", "have": 1, "need": 12}, {"key": "directors", "label": "Personally enrolled Directors", "have": 0, "need": 2}, {"key": "ov", "label": "Organization volume", "have": 675.9, "need": 5000}, {"key": "peg", "label": "PEG volume", "have": 490, "need": 2500}, {"key": "lp", "label": "Leadership points (3-month average)", "have": 2.7, "need": 4}]}]}, {"first": "Cheryl", "status": "Director 3", "pay_rate": "Director", "goals": [{"id": "pay", "label": "Next pay level", "target": "Director 2", "reqs": [{"key": "customers", "label": "Active personal customers this month", "have": 5, "need": 10}, {"key": "ov", "label": "Organization volume", "have": 2669.2, "need": 1000}, {"key": "lp", "label": "Leadership points (3-month average)", "have": 0, "need": 2}]}, {"id": "next", "label": "Next rank", "target": "Director 4", "reqs": [{"key": "customers", "label": "Active personal customers this month", "have": 5, "need": 12}, {"key": "directors", "label": "Personally enrolled Directors", "have": 1, "need": 2}, {"key": "ov", "label": "Organization volume", "have": 2669.2, "need": 5000}, {"key": "peg", "label": "PEG volume", "have": 2135, "need": 2500}, {"key": "lp", "label": "Leadership points (3-month average)", "have": 0, "need": 4}]}]}];
+const STAGES = ["Connected", "Pain found", "Invited", "Presented", "Decision", "Said yes", "Not now"];
+const ACTIVE = ["Connected", "Pain found", "Invited", "Presented", "Decision"];
+const INVITED_OR_LATER = ["Invited", "Presented", "Decision", "Said yes", "Not now"];
+const CHECKS = [
+  "Start 3 new conversations",
+  "Follow up with everyone on today's list",
+  "Invite 1 person to a 20-minute Zoom",
+  "Check in with 1 new shopper",
+  "Share 1 post or story"
+];
+const KEY = "rankup-v1-" + CONFIG.slug;
+const $ = (s) => document.querySelector(s);
+const DAY = 86400000;
+
+function todayStr(d) { d = d || new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+function parseDay(s) { const p = String(s).split("-").map(Number); return new Date(p[0], p[1] - 1, p[2]); }
+function endOfMonth() { const n = new Date(); return todayStr(new Date(n.getFullYear(), n.getMonth() + 1, 0)); }
+function fmt(n) { return Number(n).toLocaleString("en-US", { maximumFractionDigits: n % 1 ? 1 : 0 }); }
+function esc(s) { return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("show"), 1800); }
+
+function fresh() {
+  return { v: 1, goals: JSON.parse(JSON.stringify(CONFIG.goals)), leads: [], checks: {}, deadline: endOfMonth(), rate: 3, month: todayStr().slice(0, 7) };
+}
+function load() {
+  let s = null;
+  try { s = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { s = null; }
+  if (!s || s.v !== 1) s = fresh();
+  if (!s.deadline || parseDay(s.deadline) < parseDay(todayStr())) s.deadline = endOfMonth();
+  return s;
+}
+let S = load();
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { toast("Could not save on this browser"); } }
+
+function daysLeft() { return Math.max(1, Math.round((parseDay(S.deadline) - parseDay(todayStr())) / DAY) + 1); }
+function invitedCount() { return S.leads.filter((l) => INVITED_OR_LATER.includes(l.stage)).length; }
+function yesCount() { return S.leads.filter((l) => l.stage === "Said yes").length; }
+function yesRate() {
+  const inv = invitedCount();
+  if (inv >= 5) return { r: Math.max(yesCount(), 1) / inv, real: true };
+  return { r: Math.min(Math.max(Number(S.rate) || 3, 1), 10) / 10, real: false };
+}
+function goalPct(g) {
+  const parts = g.reqs.map((q) => Math.min(q.have / q.need, 1));
+  return Math.round(100 * parts.reduce((a, b) => a + b, 0) / parts.length);
+}
+function gapOf(q) { return Math.max(0, q.need - q.have); }
+function step(q) { return /volume/i.test(q.label) ? 100 : (q.key === "lp" ? 0.1 : 1); }
+
+function renderHeader() {
+  $("#hello").textContent = "Hi " + CONFIG.first + ", here is your plan";
+  $("#sub").textContent = "Today you are " + CONFIG.status + (CONFIG.pay_rate !== CONFIG.status ? ", paid at " + CONFIG.pay_rate : "") + ". Numbers started from GROW on " + CONFIG.as_of_text + ".";
+}
+
+function renderToday() {
+  const g = S.goals[0];
+  const days = daysLeft();
+  const cust = g.reqs.find((q) => q.key === "customers");
+  const custGap = cust ? gapOf(cust) : 0;
+  const yr = yesRate();
+  const invites = custGap > 0 ? Math.ceil(custGap / yr.r) : 0;
+  const perDay = invites > 0 ? Math.max(1, Math.ceil(invites / days)) : 0;
+  const follow = followUps().length;
+  const done = CHECKS.filter((c, i) => (S.checks[todayStr()] || {})[i]).length;
+  $("#todayhint").textContent = days + " day" + (days === 1 ? "" : "s") + " left until " + parseDay(S.deadline).toLocaleDateString("en-US", { month: "long", day: "numeric" }) + ". Goal: " + g.target + ".";
+  const stats = [
+    { n: perDay, l: "invites to send today", hot: perDay > 0 },
+    { n: custGap, l: "more customers this month" },
+    { n: follow, l: "people to follow up with" },
+    { n: done + "/" + CHECKS.length, l: "checklist done today" }
+  ];
+  $("#todaystats").innerHTML = stats.map((s) => '<div class="stat' + (s.hot ? " hot" : "") + '"><div class="n">' + esc(s.n) + '</div><div class="l">' + esc(s.l) + "</div></div>").join("");
+  const other = g.reqs.filter((q) => q.key !== "customers" && gapOf(q) > 0).map((q) => q.key === "directors" ? "help " + gapOf(q) + " of your people reach Director" : q.key === "senior" ? "help " + gapOf(q) + " of your Directors reach Senior Director" : fmt(gapOf(q)) + " more " + q.label.toLowerCase());
+  let note = custGap > 0 ? "About " + invites + " invites get you " + custGap + " customers" + (yr.real ? " at your real yes rate (" + Math.round(yr.r * 100) + "%)." : " if " + Math.round(yr.r * 10) + " in 10 say yes.") : "Your customer number is done for this goal.";
+  if (other.length) note += " Also on the list: " + other.join(", ") + ".";
+  $("#todaynote").textContent = note;
+}
+
+function renderGoals() {
+  $("#goallist").innerHTML = S.goals.map((g, gi) => {
+    const pct = goalPct(g);
+    const met = g.reqs.every((q) => q.have >= q.need);
+    return '<div class="goal"><div class="goal-head"><div><div class="eyebrow">' + esc(g.label) + '</div><div class="t">' + esc(g.target) + '</div></div>' +
+      '<span class="pill ' + (met ? "good" : "warn") + '">' + (met ? "All done" : pct + "% there") + '</span></div>' +
+      '<div class="overall" aria-hidden="true"><i style="width:' + pct + '%"></i></div>' +
+      g.reqs.map((q, qi) => {
+        const ok = q.have >= q.need;
+        const w = Math.min(100, Math.round(100 * q.have / q.need));
+        return '<div class="req' + (ok ? " met" : "") + '"><div class="lbl">' + esc(q.label) + '</div><div class="num">' + fmt(q.have) + " / " + fmt(q.need) + '</div>' +
+          '<div class="bar" aria-hidden="true"><i style="width:' + w + '%"></i></div>' +
+          '<div class="gap"><span>' + (ok ? "Done" : "Need " + fmt(gapOf(q)) + " more") + '</span><span class="edit">' +
+          '<button class="small ghost" data-g="' + gi + '" data-q="' + qi + '" data-d="-1" aria-label="Lower ' + esc(q.label) + '">-</button>' +
+          '<button class="small ghost" data-g="' + gi + '" data-q="' + qi + '" data-set="1" aria-label="Type a new number for ' + esc(q.label) + '">Edit</button>' +
+          '<button class="small ghost" data-g="' + gi + '" data-q="' + qi + '" data-d="1" aria-label="Raise ' + esc(q.label) + '">+</button></span></div></div>';
+      }).join("") + "</div>";
+  }).join("");
+}
+
+function syncSameKey(gi, qi) {
+  // the same number (customers, volume...) appears in more than one goal; keep them equal
+  const q = S.goals[gi].reqs[qi];
+  S.goals.forEach((g) => g.reqs.forEach((r) => { if (r.key === q.key) r.have = q.have; }));
+}
+
+function followUps() {
+  const now = parseDay(todayStr());
+  return S.leads.filter((l) => ACTIVE.includes(l.stage) && (!l.last || (now - parseDay(l.last)) / DAY >= 3))
+    .sort((a, b) => String(a.last || "").localeCompare(String(b.last || "")));
+}
+function ago(d) {
+  if (!d) return "never";
+  const n = Math.round((parseDay(todayStr()) - parseDay(d)) / DAY);
+  return n === 0 ? "today" : n === 1 ? "yesterday" : n + " days ago";
+}
+function leadHtml(l) {
+  return '<div class="lead"><div><div class="who">' + esc(l.name) + '</div><div class="meta">' + esc(l.stage) + " &middot; last talked " + ago(l.last) + (l.note ? " &middot; " + esc(l.note) : "") + "</div></div>" +
+    '<button class="small primary" data-touch="' + l.id + '">Talked today</button>' +
+    '<div class="acts"><select data-stage="' + l.id + '" aria-label="Stage for ' + esc(l.name) + '">' + STAGES.map((s) => "<option" + (s === l.stage ? " selected" : "") + ">" + s + "</option>").join("") + "</select>" +
+    '<button class="small" data-note="' + l.id + '">Note</button><button class="small ghost" data-del="' + l.id + '">Remove</button></div></div>';
+}
+function renderFollow() {
+  const f = followUps();
+  $("#followlist").innerHTML = f.length ? f.map(leadHtml).join("") : '<div class="empty">Nobody is waiting on you. Nice work.</div>';
+}
+function renderLeads() {
+  const counts = STAGES.map((s) => S.leads.filter((l) => l.stage === s).length);
+  const inv = invitedCount();
+  const yr = inv ? Math.round(100 * yesCount() / inv) + "%" : "-";
+  $("#funnel").innerHTML = STAGES.slice(0, 6).map((s, i) => '<div class="stat"><div class="n">' + counts[i] + '</div><div class="l">' + s + "</div></div>").join("") +
+    '<div class="stat"><div class="n">' + yr + '</div><div class="l">invite to yes</div></div>';
+  const f = $("#filter").value || "All active";
+  const shown = S.leads.filter((l) => f === "Everyone" || (f === "All active" ? ACTIVE.includes(l.stage) : l.stage === f));
+  $("#leadlist").innerHTML = shown.length ? shown.map(leadHtml).join("") : '<div class="empty">No one here yet. Add the first name above.</div>';
+}
+
+function renderChecks() {
+  const day = todayStr();
+  const today = S.checks[day] || {};
+  $("#checks").innerHTML = CHECKS.map((c, i) => '<div class="check"><input type="checkbox" id="c' + i + '" data-check="' + i + '"' + (today[i] ? " checked" : "") + '><label for="c' + i + '">' + esc(c) + "</label></div>").join("");
+  let streak = 0, d = new Date();
+  const full = (k) => CHECKS.every((_, i) => (S.checks[k] || {})[i]);
+  if (!full(day)) d = new Date(d.getTime() - DAY);
+  while (full(todayStr(d))) { streak++; d = new Date(d.getTime() - DAY); }
+  $("#streak").textContent = streak ? "You have done every item " + streak + " day" + (streak === 1 ? "" : "s") + " in a row." : "The daily work that grows your business. Tick each one off as you do it.";
+}
+
+function renderTeam() {
+  if (!TEAM.length) return;
+  $("#teamcard").hidden = false; $("#teamtab").hidden = false;
+  $("#teamhint").textContent = "Where your builders stood in GROW on " + CONFIG.as_of_text + ". Their own pages keep their live numbers.";
+  $("#teamlist").innerHTML = TEAM.map((m) => {
+    const g = m.goals[0];
+    const gaps = g.reqs.filter((q) => q.have < q.need).map((q) => "<li>" + esc(q.label) + ": " + fmt(q.have) + " of " + fmt(q.need) + "</li>").join("");
+    return '<div class="mate"><div class="nm">' + esc(m.first) + ' <span class="pill warn">' + goalPct(g) + "% to " + esc(g.target) + "</span></div>" +
+      '<div class="note">' + esc(m.status) + ", paid at " + esc(m.pay_rate) + "</div><ul>" + gaps + "</ul></div>";
+  }).join("");
+}
+
+function renderAll() { renderHeader(); renderToday(); renderGoals(); renderFollow(); renderLeads(); renderChecks(); renderTeam(); }
+
+// month rollover: customers this month start again from 0
+(function () {
+  const m = todayStr().slice(0, 7);
+  if (S.month !== m) {
+    S.goals.forEach((g) => g.reqs.forEach((q) => { if (q.key === "customers") q.have = 0; }));
+    S.month = m; save();
+    setTimeout(() => toast("New month: customers start again from 0"), 400);
+  }
+})();
+
+$("#newstage").innerHTML = ACTIVE.map((s) => "<option>" + s + "</option>").join("");
+$("#filter").innerHTML = ["All active", "Everyone"].concat(STAGES).map((s) => "<option>" + s + "</option>").join("");
+$("#deadline").value = S.deadline;
+$("#rate").value = S.rate;
+
+$("#addform").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = $("#newname").value.trim();
+  if (!name) return;
+  S.leads.unshift({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name, stage: $("#newstage").value, note: $("#newnote").value.trim(), last: todayStr() });
+  $("#newname").value = ""; $("#newnote").value = "";
+  save(); renderAll(); toast("Added " + name);
+});
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.g !== undefined) {
+    const q = S.goals[+b.dataset.g].reqs[+b.dataset.q];
+    if (b.dataset.set) {
+      const v = prompt(q.label + ": type the new number", q.have);
+      if (v === null) return;
+      const n = Number(String(v).replace(/,/g, ""));
+      if (!isFinite(n) || n < 0) { toast("That is not a number"); return; }
+      q.have = n;
+    } else {
+      q.have = Math.max(0, Math.round((q.have + Number(b.dataset.d) * step(q)) * 10) / 10);
+    }
+    syncSameKey(+b.dataset.g, +b.dataset.q); save(); renderAll(); return;
+  }
+  const id = b.dataset.touch || b.dataset.del || b.dataset.note;
+  if (!id) return;
+  const l = S.leads.find((x) => x.id === id); if (!l) return;
+  if (b.dataset.touch) { l.last = todayStr(); toast("Marked " + l.name + " as talked to today"); }
+  if (b.dataset.note) { const v = prompt("Note for " + l.name, l.note || ""); if (v === null) return; l.note = v.trim(); }
+  if (b.dataset.del) { if (!confirm("Remove " + l.name + " from your list?")) return; S.leads = S.leads.filter((x) => x.id !== id); }
+  save(); renderAll();
+});
+document.addEventListener("change", (e) => {
+  const t = e.target;
+  if (t.dataset.stage) {
+    const l = S.leads.find((x) => x.id === t.dataset.stage);
+    if (l) {
+      const was = l.stage; l.stage = t.value; l.last = todayStr();
+      if (t.value === "Said yes" && was !== "Said yes") toast("Yes! Add 1 to your customers if they ordered.");
+      save(); renderAll();
+    }
+  } else if (t.dataset.check !== undefined) {
+    const day = todayStr(); S.checks[day] = S.checks[day] || {}; S.checks[day][t.dataset.check] = t.checked;
+    save(); renderToday(); renderChecks();
+  } else if (t.id === "filter") renderLeads();
+  else if (t.id === "deadline") { if (t.value) { S.deadline = t.value; save(); renderToday(); } }
+  else if (t.id === "rate") { S.rate = Math.min(10, Math.max(1, Number(t.value) || 3)); save(); renderToday(); }
+});
+$("#export").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(S, null, 1)], { type: "application/json" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "rank-up-backup-" + CONFIG.first.toLowerCase() + "-" + todayStr() + ".json";
+  document.body.appendChild(a); a.click(); a.remove(); toast("Backup saved");
+});
+$("#importbtn").addEventListener("click", () => $("#importfile").click());
+$("#importfile").addEventListener("change", (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try { const d = JSON.parse(r.result); if (d.v !== 1 || !Array.isArray(d.leads) || !Array.isArray(d.goals)) throw 0; S = d; save(); renderAll(); $("#deadline").value = S.deadline; $("#rate").value = S.rate; toast("Backup loaded"); }
+    catch (err) { toast("That file is not a Rank-Up backup"); }
+  };
+  r.readAsText(f);
+});
+renderAll();
+</script>
+</body>
+</html>
