@@ -8,87 +8,92 @@
 <title>Cheryl's Rank-Up Command Center</title>
 <style>
 :root{
-  --bg:#f4f6fa; --card:#ffffff; --ink:#13213c; --muted:#5b6780; --line:#e2e6ee;
-  --accent:#c8102e; --accent-ink:#ffffff; --good:#1d8a4b; --good-bg:#e7f5ec;
-  --warn:#b86e00; --warn-bg:#fff3df; --chip:#eef1f7; --bar:#e6e9f0; --focus:#2b62d9;
+  color-scheme: light dark;
+  --bg:#f4f6fa; --card:#ffffff; --ink:#13213c; --muted:#4f5a72; --line:#cfd5e1;
+  --accent:#c8102e; --accent-ink:#ffffff; --good:#17703c; --good-bg:#e4f3ea;
+  --warn:#8f5500; --warn-bg:#fff0d6; --chip:#eceff6; --bar:#e2e6ee; --focus:#2b62d9;
   --sans:"Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0e1424; --card:#16203a; --ink:#e9edf6; --muted:#9aa6c0; --line:#26314d;
-    --accent:#ff4b5f; --accent-ink:#ffffff; --good:#4cc782; --good-bg:#14301f;
-    --warn:#ffb547; --warn-bg:#33270f; --chip:#1e2a49; --bar:#26314d; --focus:#7aa2ff;
+    color-scheme: dark;
+    --bg:#0e1424; --card:#16203a; --ink:#e9edf6; --muted:#a9b4cc; --line:#34405f;
+    --accent:#d92a42; --accent-ink:#ffffff; --good:#5fd394; --good-bg:#14301f;
+    --warn:#ffbf5c; --warn-bg:#33270f; --chip:#1e2a49; --bar:#2c3757; --focus:#8fb0ff;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0e1424; --card:#16203a; --ink:#e9edf6; --muted:#9aa6c0; --line:#26314d;
-  --accent:#ff4b5f; --accent-ink:#ffffff; --good:#4cc782; --good-bg:#14301f;
-  --warn:#ffb547; --warn-bg:#33270f; --chip:#1e2a49; --bar:#26314d; --focus:#7aa2ff;
+  color-scheme: dark;
+  --bg:#0e1424; --card:#16203a; --ink:#e9edf6; --muted:#a9b4cc; --line:#34405f;
+  --accent:#d92a42; --accent-ink:#ffffff; --good:#5fd394; --good-bg:#14301f;
+  --warn:#ffbf5c; --warn-bg:#33270f; --chip:#1e2a49; --bar:#2c3757; --focus:#8fb0ff;
 }
 *{box-sizing:border-box}
-html{background:var(--bg)}
+html{background:var(--bg);scroll-padding-top:64px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
-.wrap{width:min(760px,calc(100% - 32px));margin:0 auto;padding:20px 0 60px;display:flex;flex-direction:column;gap:16px}
+.wrap{width:min(760px,calc(100% - 32px));margin:0 auto;padding:max(20px,env(safe-area-inset-top)) 0 max(60px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px}
 header h1{margin:4px 0 2px;font-size:26px;line-height:1.15;text-wrap:balance}
-header .sub{color:var(--muted);font-size:14px}
+header .sub{color:var(--muted);font-size:15px}
 .eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:-4px 0}
-nav.tabs a{flex:none;text-decoration:none;color:var(--ink);background:var(--chip);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
-.card h2{margin:0 0 4px;font-size:18px}
-.card .hint{margin:0 0 12px;color:var(--muted);font-size:14px}
+nav.tabs a{flex:none;text-decoration:none;color:var(--ink);background:var(--chip);border-radius:999px;padding:8px 14px;font-size:15px;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;scroll-margin-top:64px}
+.card h2{margin:0 0 4px;font-size:19px}
+.card .hint{margin:0 0 12px;color:var(--muted);font-size:15px}
 .today{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
 .stat{background:var(--chip);border-radius:12px;padding:12px}
 .stat .n{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
-.stat .l{font-size:13px;color:var(--muted)}
+.stat .l{font-size:14px;color:var(--muted)}
 .stat.hot{background:var(--accent);color:var(--accent-ink)}
-.stat.hot .l{color:var(--accent-ink);opacity:.9}
+.stat.hot .l{color:var(--accent-ink)}
 .goal + .goal{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
 .goal-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.goal-head .t{font-weight:700;font-size:17px}
-.pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:3px 9px;background:var(--chip);color:var(--muted)}
+.goal-head .t{font-weight:700;font-size:18px}
+.pill{display:inline-block;font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px;background:var(--chip);color:var(--muted)}
 .pill.good{background:var(--good-bg);color:var(--good)}
 .pill.warn{background:var(--warn-bg);color:var(--warn)}
 .overall{height:10px;background:var(--bar);border-radius:99px;overflow:hidden;margin:10px 0 4px}
 .overall > i{display:block;height:100%;background:var(--accent);border-radius:99px}
-.req{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.req{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:12px 0;border-bottom:1px dashed var(--line)}
 .req:last-child{border-bottom:0}
-.req .lbl{font-size:15px}
+.req .lbl{font-size:16px}
 .req .num{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;white-space:nowrap}
 .req .bar{grid-column:1 / -1;height:6px;background:var(--bar);border-radius:99px;overflow:hidden}
 .req .bar > i{display:block;height:100%;background:var(--warn);border-radius:99px}
 .req.met .bar > i{background:var(--good)}
-.req .gap{grid-column:1 / -1;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.req .gap{grid-column:1 / -1;font-size:14px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:8px}
 .req.met .gap{color:var(--good);font-weight:600}
-.edit{display:inline-flex;gap:4px}
-button,.btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;cursor:pointer;min-height:36px}
-button.small{padding:3px 9px;min-height:30px;font-size:14px}
+.edit{display:inline-flex;gap:8px}
+button,.btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 12px;cursor:pointer;min-height:40px}
+button.small{padding:4px 10px;min-height:40px;min-width:44px;font-size:15px}
 button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+button.calm{background:var(--good-bg);color:var(--good);border-color:transparent;font-weight:700}
 button.ghost{background:transparent}
+button:disabled{cursor:default}
 button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-height:38px;width:100%}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-height:42px;width:100%}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .row > *{flex:1 1 140px}
 .list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-.lead{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center}
+.lead{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:8px 10px;align-items:center}
 .lead .who{font-weight:700}
-.lead .meta{font-size:13px;color:var(--muted)}
-.lead .acts{grid-column:1 / -1;display:flex;gap:6px;flex-wrap:wrap}
-.lead .acts select{width:auto;flex:1 1 150px;min-height:34px;padding:4px 8px}
-.empty{color:var(--muted);font-size:14px;padding:6px 0}
+.lead .meta{font-size:14px;color:var(--muted)}
+.lead .acts{grid-column:1 / -1;display:flex;gap:8px;flex-wrap:wrap}
+.lead .acts select{width:auto;flex:1 1 150px;min-height:40px;padding:4px 8px}
+.empty{color:var(--muted);font-size:15px;padding:6px 0}
 .funnel{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;margin:10px 0}
 .funnel .stat .n{font-size:22px}
-.check{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.check{display:flex;align-items:center;gap:10px;border-bottom:1px dashed var(--line)}
 .check:last-child{border-bottom:0}
-.check input{width:22px;height:22px;min-height:0;flex:none;accent-color:var(--good)}
-.check label{flex:1}
+.check input{width:24px;height:24px;min-height:0;flex:none;accent-color:var(--good)}
+.check label{flex:1;padding:12px 0;cursor:pointer}
 .team{display:grid;gap:10px}
 .mate{border:1px solid var(--line);border-radius:12px;padding:12px}
 .mate .nm{font-weight:700}
-.mate ul{margin:6px 0 0;padding-left:18px;font-size:14px;color:var(--muted)}
-.note{font-size:13px;color:var(--muted)}
-details summary{cursor:pointer;font-weight:700}
-.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+.mate ul{margin:6px 0 0;padding-left:18px;font-size:15px;color:var(--muted)}
+.note{font-size:14px;color:var(--muted)}
+label.field{font-size:15px;display:flex;flex-direction:column;gap:4px}
+.toast{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
 .toast.show{opacity:1}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -114,7 +119,7 @@ details summary{cursor:pointer;font-weight:700}
 
   <section class="card" id="goals">
     <h2>My numbers</h2>
-    <p class="hint">Tap + or - when a number changes. Volume and directors come from last month's business report. Customers count this month only.</p>
+    <p class="hint">Tap + or - when a number changes, or tap Edit to type it. Volume and directors come from last month's business report. Customers count this month only.</p>
     <div id="goallist"></div>
   </section>
 
@@ -128,15 +133,13 @@ details summary{cursor:pointer;font-weight:700}
     <h2>My people</h2>
     <p class="hint">Everyone you are talking to, and where they are.</p>
     <form id="addform" class="row" autocomplete="off">
-      <input id="newname" placeholder="Name" aria-label="Name" required>
-      <select id="newstage" aria-label="Stage"></select>
-      <input id="newnote" placeholder="Note (optional)" aria-label="Note">
-      <button class="primary" type="submit">Add</button>
+      <label class="field">Name<input id="newname" required></label>
+      <label class="field">Where they are<select id="newstage"></select></label>
+      <label class="field">Note (optional)<input id="newnote"></label>
+      <button class="primary" type="submit" style="align-self:flex-end">Add</button>
     </form>
     <div class="funnel" id="funnel"></div>
-    <div class="row" style="margin-top:4px">
-      <select id="filter" aria-label="Show"></select>
-    </div>
+    <label class="field">Show<select id="filter"></select></label>
     <div class="list" id="leadlist"></div>
   </section>
 
@@ -155,14 +158,14 @@ details summary{cursor:pointer;font-weight:700}
   <section class="card" id="settings">
     <h2>Settings</h2>
     <div class="row">
-      <label style="flex:1 1 200px">Goal date<br><input type="date" id="deadline"></label>
-      <label style="flex:1 1 200px">Out of every 10 people I invite, about this many say yes<br><input type="number" id="rate" min="1" max="10" step="1"></label>
+      <label class="field" style="flex:1 1 200px">Goal date<input type="date" id="deadline"></label>
+      <label class="field" style="flex:1 1 200px">Out of every 10 people I invite, about this many say yes<input type="number" id="rate" min="1" max="10" step="1" inputmode="numeric"></label>
     </div>
-    <p class="note">Once you have invited 5 or more people here, the page uses your real yes rate instead.</p>
+    <p class="note">Once you have invited 5 or more people and at least 1 said yes, the page uses your real yes rate instead.</p>
     <div class="row" style="margin-top:12px">
       <button type="button" id="export">Save a backup</button>
       <button type="button" id="importbtn">Load a backup</button>
-      <input type="file" id="importfile" accept="application/json" hidden>
+      <input type="file" id="importfile" accept="application/json,.json" hidden>
     </div>
     <p class="note" style="margin-top:10px">Everything you type stays on this phone or computer only. Save a backup now and then so you never lose your list.</p>
   </section>
@@ -170,11 +173,12 @@ details summary{cursor:pointer;font-weight:700}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-const CONFIG = {"slug": "cheryl-p8x", "first": "Cheryl", "status": "Director 3", "pay_rate": "Director", "goals": [{"id": "pay", "label": "Next pay level", "target": "Director 2", "reqs": [{"key": "customers", "label": "Active personal customers this month", "have": 5, "need": 10}, {"key": "ov", "label": "Organization volume", "have": 2669.2, "need": 1000}, {"key": "lp", "label": "Leadership points (3-month average)", "have": 0, "need": 2}]}, {"id": "next", "label": "Next rank", "target": "Director 4", "reqs": [{"key": "customers", "label": "Active personal customers this month", "have": 5, "need": 12}, {"key": "directors", "label": "Personally enrolled Directors", "have": 1, "need": 2}, {"key": "ov", "label": "Organization volume", "have": 2669.2, "need": 5000}, {"key": "peg", "label": "PEG volume", "have": 2135, "need": 2500}, {"key": "lp", "label": "Leadership points (3-month average)", "have": 0, "need": 4}]}], "as_of_text": "November 4"};
+const CONFIG = {"slug": "cheryl-p8x", "first": "Cheryl", "status": "Director 3", "pay_rate": "Director", "goals": [{"id": "pay", "label": "Next pay level", "target": "Director 2", "reqs": [{"key": "customers", "label": "Active personal customers this month", "have": 5, "need": 10}, {"key": "ov", "label": "Organization volume", "have": 2669.2, "need": 1000}, {"key": "lp", "label": "Leadership points (3-month average)", "have": 0, "need": 2}]}, {"id": "next", "label": "Next rank", "target": "Director 4", "reqs": [{"key": "customers", "label": "Active personal customers this month", "have": 5, "need": 12}, {"key": "directors", "label": "Personally enrolled Directors", "have": 1, "need": 2}, {"key": "ov", "label": "Organization volume", "have": 2669.2, "need": 5000}, {"key": "peg", "label": "PEG volume", "have": 2135, "need": 2500}, {"key": "lp", "label": "Leadership points (3-month average)", "have": 0, "need": 4}]}], "as_of_text": "November 4", "as_of": "2026-11-04"};
 const TEAM = [];
 const STAGES = ["Connected", "Pain found", "Invited", "Presented", "Decision", "Said yes", "Not now"];
 const ACTIVE = ["Connected", "Pain found", "Invited", "Presented", "Decision"];
-const INVITED_OR_LATER = ["Invited", "Presented", "Decision", "Said yes", "Not now"];
+const INVITED_STAGES = ["Invited", "Presented", "Decision", "Said yes"];
+const COUNTS = ["customers", "directors", "senior"];
 const CHECKS = [
   "Start 3 new conversations",
   "Follow up with everyone on today's list",
@@ -187,85 +191,125 @@ const $ = (s) => document.querySelector(s);
 const DAY = 86400000;
 
 function todayStr(d) { d = d || new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
-function parseDay(s) { const p = String(s).split("-").map(Number); return new Date(p[0], p[1] - 1, p[2]); }
+function parseDay(s) { const p = String(s).split("-").map(Number); return new Date(p[0], p[1] - 1, p[2], 12); }
+function dayDiff(a, b) { return Math.round((parseDay(a) - parseDay(b)) / DAY); }
 function endOfMonth() { const n = new Date(); return todayStr(new Date(n.getFullYear(), n.getMonth() + 1, 0)); }
-function fmt(n) { return Number(n).toLocaleString("en-US", { maximumFractionDigits: n % 1 ? 1 : 0 }); }
+function fmt(n) { n = Number(n); return n.toLocaleString("en-US", { maximumFractionDigits: n % 1 ? 1 : 0 }); }
 function esc(s) { return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
-function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("show"), 1800); }
+function plural(n, one, many) { return Number(n) === 1 ? one : many; }
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("show"), 2200); }
+const isDay = (s) => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s);
 
 function fresh() {
-  return { v: 1, goals: JSON.parse(JSON.stringify(CONFIG.goals)), leads: [], checks: {}, deadline: endOfMonth(), rate: 3, month: todayStr().slice(0, 7) };
+  return { v: 1, slug: CONFIG.slug, asof: CONFIG.as_of, goals: JSON.parse(JSON.stringify(CONFIG.goals)), leads: [], checks: {}, deadline: endOfMonth(), rate: 3, month: CONFIG.as_of.slice(0, 7) };
+}
+// A new GROW read (new as_of) replaces the goals and starting numbers; her people, checklist and settings stay.
+function upgrade(s) {
+  if (s.asof !== CONFIG.as_of) {
+    s.goals = JSON.parse(JSON.stringify(CONFIG.goals));
+    s.asof = CONFIG.as_of;
+    s.month = CONFIG.as_of.slice(0, 7);
+    s.fromGrow = true;
+  }
+  s.slug = CONFIG.slug;
+  return s;
 }
 function load() {
   let s = null;
   try { s = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { s = null; }
-  if (!s || s.v !== 1) s = fresh();
-  if (!s.deadline || parseDay(s.deadline) < parseDay(todayStr())) s.deadline = endOfMonth();
-  return s;
+  if (!valid(s)) s = fresh();
+  return upgrade(s);
+}
+function valid(d) {
+  if (!d || d.v !== 1 || !Array.isArray(d.goals) || !d.goals.length || !Array.isArray(d.leads)) return false;
+  if (!d.goals.every((g) => g && typeof g.target === "string" && Array.isArray(g.reqs) && g.reqs.length &&
+    g.reqs.every((q) => q && typeof q.key === "string" && typeof q.label === "string" && isFinite(q.have) && isFinite(q.need) && q.need > 0))) return false;
+  if (!d.leads.every((l) => l && typeof l.id === "string" && /^[a-z0-9]+$/i.test(l.id) && typeof l.name === "string" && STAGES.includes(l.stage) && (!l.last || isDay(l.last)))) return false;
+  if (d.checks !== undefined && (typeof d.checks !== "object" || Array.isArray(d.checks))) return false;
+  if (d.deadline !== undefined && !isDay(d.deadline)) return false;
+  return true;
 }
 let S = load();
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { toast("Could not save on this browser"); } }
 
-function daysLeft() { return Math.max(1, Math.round((parseDay(S.deadline) - parseDay(todayStr())) / DAY) + 1); }
-function invitedCount() { return S.leads.filter((l) => INVITED_OR_LATER.includes(l.stage)).length; }
+// New day or new month since the page was opened: customers this month start again at 0, and a passed goal date moves to month end.
+function refreshDay() {
+  let changed = false;
+  const m = todayStr().slice(0, 7);
+  if (S.month !== m) {
+    S.goals.forEach((g) => g.reqs.forEach((q) => { if (q.key === "customers") q.have = 0; }));
+    S.month = m; changed = true;
+    setTimeout(() => toast("New month: customers this month start again at 0"), 400);
+  }
+  if (!S.checks || typeof S.checks !== "object") { S.checks = {}; changed = true; }
+  if (!isDay(S.deadline) || dayDiff(S.deadline, todayStr()) < 0) { S.deadline = endOfMonth(); changed = true; }
+  if (changed) save();
+}
+
+function daysLeft() { return Math.max(1, dayDiff(S.deadline, todayStr()) + 1); }
+function invitedCount() { return S.leads.filter((l) => l.invited || INVITED_STAGES.includes(l.stage)).length; }
 function yesCount() { return S.leads.filter((l) => l.stage === "Said yes").length; }
 function yesRate() {
-  const inv = invitedCount();
-  if (inv >= 5) return { r: Math.max(yesCount(), 1) / inv, real: true };
+  const inv = invitedCount(), yes = yesCount();
+  if (inv >= 5 && yes >= 1) return { r: yes / inv, real: true };
   return { r: Math.min(Math.max(Number(S.rate) || 3, 1), 10) / 10, real: false };
 }
-function goalPct(g) {
-  const parts = g.reqs.map((q) => Math.min(q.have / q.need, 1));
-  return Math.round(100 * parts.reduce((a, b) => a + b, 0) / parts.length);
-}
-function gapOf(q) { return Math.max(0, q.need - q.have); }
+function metCount(g) { return g.reqs.filter((q) => q.have >= q.need).length; }
+function gapOf(q) { return Math.max(0, Math.round((q.need - q.have) * 10) / 10); }
 function step(q) { return /volume/i.test(q.label) ? 100 : (q.key === "lp" ? 0.1 : 1); }
+function focusGoal() { return S.goals.find((g) => g.reqs.some((q) => q.have < q.need)) || S.goals[S.goals.length - 1]; }
 
 function renderHeader() {
   $("#hello").textContent = "Hi " + CONFIG.first + ", here is your plan";
-  $("#sub").textContent = "Today you are " + CONFIG.status + (CONFIG.pay_rate !== CONFIG.status ? ", paid at " + CONFIG.pay_rate : "") + ". Numbers started from GROW on " + CONFIG.as_of_text + ".";
+  $("#sub").textContent = "Today you are " + CONFIG.status + (CONFIG.pay_rate !== CONFIG.status ? ", paid at " + CONFIG.pay_rate : "") + ". Your numbers started from GROW on " + CONFIG.as_of_text + ".";
 }
 
 function renderToday() {
-  const g = S.goals[0];
+  const g = focusGoal();
   const days = daysLeft();
   const cust = g.reqs.find((q) => q.key === "customers");
   const custGap = cust ? gapOf(cust) : 0;
   const yr = yesRate();
-  const invites = custGap > 0 ? Math.ceil(custGap / yr.r) : 0;
+  const invites = custGap > 0 ? Math.ceil(custGap / yr.r - 1e-9) : 0;
   const perDay = invites > 0 ? Math.max(1, Math.ceil(invites / days)) : 0;
   const follow = followUps().length;
   const done = CHECKS.filter((c, i) => (S.checks[todayStr()] || {})[i]).length;
-  $("#todayhint").textContent = days + " day" + (days === 1 ? "" : "s") + " left until " + parseDay(S.deadline).toLocaleDateString("en-US", { month: "long", day: "numeric" }) + ". Goal: " + g.target + ".";
+  $("#todayhint").textContent = days + plural(days, " day", " days") + " left until " + parseDay(S.deadline).toLocaleDateString("en-US", { month: "long", day: "numeric" }) + ". Working toward " + g.target + ".";
   const stats = [
-    { n: perDay, l: "invites to send today", hot: perDay > 0 },
-    { n: custGap, l: "more customers this month" },
-    { n: follow, l: "people to follow up with" },
-    { n: done + "/" + CHECKS.length, l: "checklist done today" }
+    { n: perDay, l: plural(perDay, "invite to send today", "invites to send today"), hot: perDay > 0 },
+    { n: custGap, l: plural(custGap, "more customer this month", "more customers this month") },
+    { n: follow, l: plural(follow, "person to follow up with", "people to follow up with") },
+    { n: done + " of " + CHECKS.length, l: "checklist done today" }
   ];
   $("#todaystats").innerHTML = stats.map((s) => '<div class="stat' + (s.hot ? " hot" : "") + '"><div class="n">' + esc(s.n) + '</div><div class="l">' + esc(s.l) + "</div></div>").join("");
-  const other = g.reqs.filter((q) => q.key !== "customers" && gapOf(q) > 0).map((q) => q.key === "directors" ? "help " + gapOf(q) + " of your people reach Director" : q.key === "senior" ? "help " + gapOf(q) + " of your Directors reach Senior Director" : fmt(gapOf(q)) + " more " + q.label.toLowerCase());
-  let note = custGap > 0 ? "About " + invites + " invites get you " + custGap + " customers" + (yr.real ? " at your real yes rate (" + Math.round(yr.r * 100) + "%)." : " if " + Math.round(yr.r * 10) + " in 10 say yes.") : "Your customer number is done for this goal.";
+  const other = g.reqs.filter((q) => q.key !== "customers" && gapOf(q) > 0).map((q) =>
+    q.key === "directors" ? "help " + gapOf(q) + plural(gapOf(q), " of your people reach Director", " of your people reach Director") :
+    q.key === "senior" ? "help " + gapOf(q) + plural(gapOf(q), " of your Directors reach Senior Director", " of your Directors reach Senior Director") :
+    fmt(gapOf(q)) + " more " + q.label.charAt(0).toLowerCase() + q.label.slice(1));
+  let note;
+  if (custGap > 0) {
+    note = "About " + invites + plural(invites, " invite gets you ", " invites get you ") + custGap + plural(custGap, " customer", " customers") +
+      (yr.real ? " at your real yes rate (" + Math.round(yr.r * 100) + "%)." : " if " + Math.round(yr.r * 10) + " in 10 say yes.");
+  } else note = "Your customer number for " + g.target + " is done.";
   if (other.length) note += " Also on the list: " + other.join(", ") + ".";
   $("#todaynote").textContent = note;
 }
 
 function renderGoals() {
   $("#goallist").innerHTML = S.goals.map((g, gi) => {
-    const pct = goalPct(g);
-    const met = g.reqs.every((q) => q.have >= q.need);
+    const met = metCount(g), all = g.reqs.length;
     return '<div class="goal"><div class="goal-head"><div><div class="eyebrow">' + esc(g.label) + '</div><div class="t">' + esc(g.target) + '</div></div>' +
-      '<span class="pill ' + (met ? "good" : "warn") + '">' + (met ? "All done" : pct + "% there") + '</span></div>' +
-      '<div class="overall" aria-hidden="true"><i style="width:' + pct + '%"></i></div>' +
+      '<span class="pill ' + (met === all ? "good" : "warn") + '">' + (met === all ? "All done" : met + " of " + all + " done") + '</span></div>' +
+      '<div class="overall" aria-hidden="true"><i style="width:' + Math.round(100 * met / all) + '%"></i></div>' +
       g.reqs.map((q, qi) => {
         const ok = q.have >= q.need;
         const w = Math.min(100, Math.round(100 * q.have / q.need));
-        return '<div class="req' + (ok ? " met" : "") + '"><div class="lbl">' + esc(q.label) + '</div><div class="num">' + fmt(q.have) + " / " + fmt(q.need) + '</div>' +
+        return '<div class="req' + (ok ? " met" : "") + '"><div class="lbl">' + esc(q.label) + '</div><div class="num">' + fmt(q.have) + " of " + fmt(q.need) + '</div>' +
           '<div class="bar" aria-hidden="true"><i style="width:' + w + '%"></i></div>' +
           '<div class="gap"><span>' + (ok ? "Done" : "Need " + fmt(gapOf(q)) + " more") + '</span><span class="edit">' +
-          '<button class="small ghost" data-g="' + gi + '" data-q="' + qi + '" data-d="-1" aria-label="Lower ' + esc(q.label) + '">-</button>' +
+          '<button class="small ghost" data-g="' + gi + '" data-q="' + qi + '" data-d="-1" aria-label="Take ' + step(q) + ' off ' + esc(q.label) + '">&minus;</button>' +
           '<button class="small ghost" data-g="' + gi + '" data-q="' + qi + '" data-set="1" aria-label="Type a new number for ' + esc(q.label) + '">Edit</button>' +
-          '<button class="small ghost" data-g="' + gi + '" data-q="' + qi + '" data-d="1" aria-label="Raise ' + esc(q.label) + '">+</button></span></div></div>';
+          '<button class="small ghost" data-g="' + gi + '" data-q="' + qi + '" data-d="1" aria-label="Add ' + step(q) + ' to ' + esc(q.label) + '">+</button></span></div></div>';
       }).join("") + "</div>";
   }).join("");
 }
@@ -277,98 +321,92 @@ function syncSameKey(gi, qi) {
 }
 
 function followUps() {
-  const now = parseDay(todayStr());
-  return S.leads.filter((l) => ACTIVE.includes(l.stage) && (!l.last || (now - parseDay(l.last)) / DAY >= 3))
+  const t = todayStr();
+  return S.leads.filter((l) => ACTIVE.includes(l.stage) && (!l.last || dayDiff(t, l.last) >= 3))
     .sort((a, b) => String(a.last || "").localeCompare(String(b.last || "")));
 }
 function ago(d) {
   if (!d) return "never";
-  const n = Math.round((parseDay(todayStr()) - parseDay(d)) / DAY);
-  return n === 0 ? "today" : n === 1 ? "yesterday" : n + " days ago";
+  const n = dayDiff(todayStr(), d);
+  return n <= 0 ? "today" : n === 1 ? "yesterday" : n + " days ago";
 }
 function leadHtml(l) {
+  const id = esc(l.id);
+  const talked = l.last === todayStr();
   return '<div class="lead"><div><div class="who">' + esc(l.name) + '</div><div class="meta">' + esc(l.stage) + " &middot; last talked " + ago(l.last) + (l.note ? " &middot; " + esc(l.note) : "") + "</div></div>" +
-    '<button class="small primary" data-touch="' + l.id + '">Talked today</button>' +
-    '<div class="acts"><select data-stage="' + l.id + '" aria-label="Stage for ' + esc(l.name) + '">' + STAGES.map((s) => "<option" + (s === l.stage ? " selected" : "") + ">" + s + "</option>").join("") + "</select>" +
-    '<button class="small" data-note="' + l.id + '">Note</button><button class="small ghost" data-del="' + l.id + '">Remove</button></div></div>';
+    (talked ? '<button class="small calm" disabled>Talked today &#10003;</button>' : '<button class="small primary" data-touch="' + id + '">Mark talked today</button>') +
+    '<div class="acts"><select data-stage="' + id + '" aria-label="Where ' + esc(l.name) + ' is">' + STAGES.map((s) => "<option" + (s === l.stage ? " selected" : "") + ">" + s + "</option>").join("") + "</select>" +
+    '<button class="small" data-note="' + id + '">Note</button><button class="small ghost" data-del="' + id + '">Remove</button></div></div>';
 }
 function renderFollow() {
   const f = followUps();
-  $("#followlist").innerHTML = f.length ? f.map(leadHtml).join("") : '<div class="empty">Nobody is waiting on you. Nice work.</div>';
+  $("#followlist").innerHTML = f.length ? f.map(leadHtml).join("") :
+    '<div class="empty">' + (S.leads.length ? "Nobody is waiting on you. Nice work." : "Add people under My people. They show up here when it is time to follow up.") + "</div>";
 }
 function renderLeads() {
   const counts = STAGES.map((s) => S.leads.filter((l) => l.stage === s).length);
   const inv = invitedCount();
-  const yr = inv ? Math.round(100 * yesCount() / inv) + "%" : "-";
+  const yr = inv ? Math.round(100 * yesCount() / inv) + "%" : "none yet";
   $("#funnel").innerHTML = STAGES.slice(0, 6).map((s, i) => '<div class="stat"><div class="n">' + counts[i] + '</div><div class="l">' + s + "</div></div>").join("") +
-    '<div class="stat"><div class="n">' + yr + '</div><div class="l">invite to yes</div></div>';
+    '<div class="stat"><div class="n">' + yr + '</div><div class="l">of invites said yes</div></div>';
   const f = $("#filter").value || "All active";
   const shown = S.leads.filter((l) => f === "Everyone" || (f === "All active" ? ACTIVE.includes(l.stage) : l.stage === f));
-  $("#leadlist").innerHTML = shown.length ? shown.map(leadHtml).join("") : '<div class="empty">No one here yet. Add the first name above.</div>';
+  $("#leadlist").innerHTML = shown.length ? shown.map(leadHtml).join("") : '<div class="empty">' + (S.leads.length ? "Nobody in this group." : "No one here yet. Add the first name above.") + "</div>";
 }
 
 function renderChecks() {
   const day = todayStr();
   const today = S.checks[day] || {};
   $("#checks").innerHTML = CHECKS.map((c, i) => '<div class="check"><input type="checkbox" id="c' + i + '" data-check="' + i + '"' + (today[i] ? " checked" : "") + '><label for="c' + i + '">' + esc(c) + "</label></div>").join("");
-  let streak = 0, d = new Date();
   const full = (k) => CHECKS.every((_, i) => (S.checks[k] || {})[i]);
+  let d = parseDay(day), streak = 0;
   if (!full(day)) d = new Date(d.getTime() - DAY);
   while (full(todayStr(d))) { streak++; d = new Date(d.getTime() - DAY); }
-  $("#streak").textContent = streak ? "You have done every item " + streak + " day" + (streak === 1 ? "" : "s") + " in a row." : "The daily work that grows your business. Tick each one off as you do it.";
+  $("#streak").textContent = streak ? "You have done every item " + streak + plural(streak, " day", " days") + " in a row." : "The daily work that grows your business. Tick each one off as you do it.";
 }
 
 function renderTeam() {
   if (!TEAM.length) return;
   $("#teamcard").hidden = false; $("#teamtab").hidden = false;
-  $("#teamhint").textContent = "Where your builders stood in GROW on " + CONFIG.as_of_text + ". Their own pages keep their live numbers.";
+  $("#teamhint").textContent = "Where " + TEAM.map((m) => m.first).join(" and ") + " stood in GROW on " + CONFIG.as_of_text + ". Their updates stay on their own phones, so ask them or check GROW for today's numbers.";
   $("#teamlist").innerHTML = TEAM.map((m) => {
-    const g = m.goals[0];
+    const g = m.goals[0], met = metCount(g), all = g.reqs.length;
     const gaps = g.reqs.filter((q) => q.have < q.need).map((q) => "<li>" + esc(q.label) + ": " + fmt(q.have) + " of " + fmt(q.need) + "</li>").join("");
-    return '<div class="mate"><div class="nm">' + esc(m.first) + ' <span class="pill warn">' + goalPct(g) + "% to " + esc(g.target) + "</span></div>" +
+    return '<div class="mate"><div class="nm">' + esc(m.first) + ' <span class="pill ' + (met === all ? "good" : "warn") + '">' + met + " of " + all + " done for " + esc(g.target) + "</span></div>" +
       '<div class="note">' + esc(m.status) + ", paid at " + esc(m.pay_rate) + "</div><ul>" + gaps + "</ul></div>";
   }).join("");
 }
 
-function renderAll() { renderHeader(); renderToday(); renderGoals(); renderFollow(); renderLeads(); renderChecks(); renderTeam(); }
-
-// month rollover: customers this month start again from 0
-(function () {
-  const m = todayStr().slice(0, 7);
-  if (S.month !== m) {
-    S.goals.forEach((g) => g.reqs.forEach((q) => { if (q.key === "customers") q.have = 0; }));
-    S.month = m; save();
-    setTimeout(() => toast("New month: customers start again from 0"), 400);
-  }
-})();
+function renderAll() { refreshDay(); renderHeader(); renderToday(); renderGoals(); renderFollow(); renderLeads(); renderChecks(); renderTeam(); $("#deadline").value = S.deadline; $("#deadline").min = todayStr(); $("#rate").value = S.rate; }
+function refocus(sel) { const el = sel && document.querySelector(sel); if (el && !el.disabled) el.focus(); }
 
 $("#newstage").innerHTML = ACTIVE.map((s) => "<option>" + s + "</option>").join("");
 $("#filter").innerHTML = ["All active", "Everyone"].concat(STAGES).map((s) => "<option>" + s + "</option>").join("");
-$("#deadline").value = S.deadline;
-$("#rate").value = S.rate;
 
 $("#addform").addEventListener("submit", (e) => {
   e.preventDefault();
   const name = $("#newname").value.trim();
   if (!name) return;
-  S.leads.unshift({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name, stage: $("#newstage").value, note: $("#newnote").value.trim(), last: todayStr() });
+  const stage = $("#newstage").value;
+  S.leads.unshift({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name, stage, invited: INVITED_STAGES.includes(stage), note: $("#newnote").value.trim(), last: todayStr() });
   $("#newname").value = ""; $("#newnote").value = "";
-  save(); renderAll(); toast("Added " + name);
+  save(); renderAll(); toast("Added " + name); $("#newname").focus();
 });
 document.addEventListener("click", (e) => {
   const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.g !== undefined) {
     const q = S.goals[+b.dataset.g].reqs[+b.dataset.q];
+    const sel = '[data-g="' + b.dataset.g + '"][data-q="' + b.dataset.q + '"]' + (b.dataset.set ? "[data-set]" : '[data-d="' + b.dataset.d + '"]');
     if (b.dataset.set) {
       const v = prompt(q.label + ": type the new number", q.have);
-      if (v === null) return;
-      const n = Number(String(v).replace(/,/g, ""));
-      if (!isFinite(n) || n < 0) { toast("That is not a number"); return; }
-      q.have = n;
+      if (v === null || String(v).trim() === "") return;
+      const n = Number(String(v).replace(/[,$\s]/g, ""));
+      if (!isFinite(n) || n < 0) { toast("Please type a number, like 12"); return; }
+      q.have = COUNTS.includes(q.key) ? Math.round(n) : Math.round(n * 10) / 10;
     } else {
       q.have = Math.max(0, Math.round((q.have + Number(b.dataset.d) * step(q)) * 10) / 10);
     }
-    syncSameKey(+b.dataset.g, +b.dataset.q); save(); renderAll(); return;
+    syncSameKey(+b.dataset.g, +b.dataset.q); save(); renderAll(); refocus(sel); return;
   }
   const id = b.dataset.touch || b.dataset.del || b.dataset.note;
   if (!id) return;
@@ -384,15 +422,18 @@ document.addEventListener("change", (e) => {
     const l = S.leads.find((x) => x.id === t.dataset.stage);
     if (l) {
       const was = l.stage; l.stage = t.value; l.last = todayStr();
+      if (INVITED_STAGES.includes(t.value)) l.invited = true;
       if (t.value === "Said yes" && was !== "Said yes") toast("Yes! Add 1 to your customers if they ordered.");
-      save(); renderAll();
+      save(); renderAll(); refocus('[data-stage="' + t.dataset.stage + '"]');
     }
   } else if (t.dataset.check !== undefined) {
     const day = todayStr(); S.checks[day] = S.checks[day] || {}; S.checks[day][t.dataset.check] = t.checked;
-    save(); renderToday(); renderChecks();
+    save(); renderToday(); renderChecks(); refocus("#c" + t.dataset.check);
   } else if (t.id === "filter") renderLeads();
-  else if (t.id === "deadline") { if (t.value) { S.deadline = t.value; save(); renderToday(); } }
-  else if (t.id === "rate") { S.rate = Math.min(10, Math.max(1, Number(t.value) || 3)); save(); renderToday(); }
+  else if (t.id === "deadline") {
+    if (isDay(t.value) && dayDiff(t.value, todayStr()) >= 0) { S.deadline = t.value; save(); renderToday(); }
+    else { toast("Pick today or a later date"); t.value = S.deadline; }
+  } else if (t.id === "rate") { S.rate = Math.min(10, Math.max(1, Math.round(Number(t.value)) || 3)); t.value = S.rate; save(); renderToday(); }
 });
 $("#export").addEventListener("click", () => {
   const blob = new Blob([JSON.stringify(S, null, 1)], { type: "application/json" });
@@ -401,15 +442,24 @@ $("#export").addEventListener("click", () => {
 });
 $("#importbtn").addEventListener("click", () => $("#importfile").click());
 $("#importfile").addEventListener("change", (e) => {
-  const f = e.target.files[0]; if (!f) return;
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
   const r = new FileReader();
   r.onload = () => {
-    try { const d = JSON.parse(r.result); if (d.v !== 1 || !Array.isArray(d.leads) || !Array.isArray(d.goals)) throw 0; S = d; save(); renderAll(); $("#deadline").value = S.deadline; $("#rate").value = S.rate; toast("Backup loaded"); }
-    catch (err) { toast("That file is not a Rank-Up backup"); }
+    let d = null;
+    try { d = JSON.parse(r.result); } catch (err) { d = null; }
+    if (!valid(d)) { toast("That file is not a Rank-Up backup"); return; }
+    if (d.slug && d.slug !== CONFIG.slug) { toast("That backup belongs to someone else's page"); return; }
+    if (!confirm("This replaces your list on this page with the backup. Keep going?")) return;
+    d.checks = d.checks || {}; d.rate = Math.min(10, Math.max(1, Math.round(Number(d.rate)) || 3));
+    d.month = typeof d.month === "string" ? d.month : todayStr().slice(0, 7);
+    S = upgrade(d); save(); renderAll(); toast("Backup loaded");
   };
   r.readAsText(f);
 });
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") renderAll(); });
+window.addEventListener("pageshow", () => renderAll());
 renderAll();
+if (S.fromGrow) { delete S.fromGrow; save(); }
 </script>
 </body>
 </html>
